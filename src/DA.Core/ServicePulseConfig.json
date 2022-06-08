@@ -1,0 +1,26 @@
+{
+  "Heartbeats": {
+    "Enabled": true,
+    "HeartbeatsQueue": "Particular.Servicecontrol",
+    "Frequency": "00:00:10",
+    "TimeToLive": "00:00:40"
+  },
+  "MessageAudit": {
+    "Enabled": true,
+    "AuditQueue": "audit"
+  },
+  "CustomChecks": {
+    "Enabled": true,
+    "CustomChecksQueue": "Particular.Servicecontrol"
+  },
+  "ErrorQueue": "error",
+  "SagaAudit": {
+    "Enabled": true,
+    "SagaAuditQueue": "audit"
+  },
+  "Metrics": {
+    "Enabled": true,
+    "MetricsQueue": "Particular.Monitoring",
+    "Interval": "00:00:01"
+  }
+}
