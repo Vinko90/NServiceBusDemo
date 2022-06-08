@@ -7,7 +7,7 @@ Also, this solution make use of on-premise installation of ServiceControl, Servi
 ## Architecture
 The high level overview of the system is as follow:
 
-![architecture](./resources/ArchitectureOverview.jpg)
+![architecture](./resources/ArchitectureOverview.jpeg)
 
 ## How to run?
 
