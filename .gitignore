@@ -348,5 +348,14 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+   
+# Common IntelliJ Platform excludes
 
+# User specific
+.idea/
+
+[Pp]ackages/
+
+Thumbs.db
+Desktop.ini
 .DS_Store

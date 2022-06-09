@@ -1,9 +1,8 @@
 ﻿using NServiceBus;
 
-namespace DA.Core.Events
+namespace DA.Core.Events;
+
+public class OrderPlaced : IEvent
 {
-    public class OrderPlaced : IEvent
-    {
-        public string OrderId { get; set; }
-    }
+    public string OrderId { get; set; }
 }

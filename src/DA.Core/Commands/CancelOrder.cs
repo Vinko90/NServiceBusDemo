@@ -1,9 +1,8 @@
 ﻿using NServiceBus;
 
-namespace DA.Core.Commands
+namespace DA.Core.Commands;
+
+public class CancelOrder : ICommand
 {
-    public class CancelOrder : ICommand
-    {
-        public string OrderId { get; set; }
-    }
+    public string OrderId { get; set; }
 }

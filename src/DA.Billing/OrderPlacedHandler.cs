@@ -2,21 +2,20 @@
 using NServiceBus;
 using NServiceBus.Logging;
 
-namespace DA.Billing
+namespace DA.Billing;
+
+public class OrderPlacedHandler : IHandleMessages<OrderPlaced>
 {
-    public class OrderPlacedHandler : IHandleMessages<OrderPlaced>
+    static ILog log = LogManager.GetLogger<OrderPlacedHandler>();
+
+    public Task Handle(OrderPlaced message, IMessageHandlerContext context)
     {
-        static ILog log = LogManager.GetLogger<OrderPlacedHandler>();
+        log.Info($"[Order: {message.OrderId}] Received OrderPlaced, credi card charged...Sending OrderBilled");
 
-        public Task Handle(OrderPlaced message, IMessageHandlerContext context)
+        var orderBilled = new OrderBilled
         {
-            log.Info($"[Order: {message.OrderId}] Received OrderPlaced, credi card charged...Sending OrderBilled");
-
-            var orderBilled = new OrderBilled
-            {
-                OrderId = message.OrderId
-            };
-            return context.Publish(orderBilled);
-        }
+            OrderId = message.OrderId
+        };
+        return context.Publish(orderBilled);
     }
 }
