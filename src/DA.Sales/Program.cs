@@ -1,4 +1,5 @@
-﻿using DA.Core.Constants;
+﻿using System.Runtime.InteropServices;
+using DA.Core.Constants;
 using Microsoft.Data.SqlClient;
 using NServiceBus;
 
@@ -36,10 +37,14 @@ class Program
                 return new SqlConnection(ConnectionString.MSSQLConnectionString);
             });
 
-        //Configure monitoring system
-        var json = File.ReadAllText("ServicePulseConfig.json");
-        var servicePlatformConnection = ServicePlatformConnectionConfiguration.Parse(json);
-        endpointConfiguration.ConnectToServicePlatform(servicePlatformConnection);
+        //In OSX we don't have ServiceControl
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            //Configure monitoring system
+            var json = await File.ReadAllTextAsync("ServicePulseConfig.json");
+            var servicePlatformConnection = ServicePlatformConnectionConfiguration.Parse(json);
+            endpointConfiguration.ConnectToServicePlatform(servicePlatformConnection);
+        }
 
         //Configure retries
         //I will disable immadiate and delayed retry to demo service pulse

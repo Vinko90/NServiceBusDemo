@@ -1,4 +1,5 @@
-﻿using DA.Core.Command;
+﻿using System.Runtime.InteropServices;
+using DA.Core.Command;
 using DA.Core.Commands;
 using DA.Core.Constants;
 using NServiceBus;
@@ -30,10 +31,14 @@ class Program
         routing.RouteToEndpoint(typeof(PlaceOrder), ServiceNames.SalesServiceName);
         routing.RouteToEndpoint(typeof(CancelOrder), ServiceNames.SalesServiceName);
 
-        //Configure monitoring system
-        var json = File.ReadAllText("ServicePulseConfig.json");
-        var servicePlatformConnection = ServicePlatformConnectionConfiguration.Parse(json);
-        endpointConfiguration.ConnectToServicePlatform(servicePlatformConnection);
+        //In OSX we don't have ServiceControl
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            //Configure monitoring system
+            var json = await File.ReadAllTextAsync("ServicePulseConfig.json");
+            var servicePlatformConnection = ServicePlatformConnectionConfiguration.Parse(json);
+            endpointConfiguration.ConnectToServicePlatform(servicePlatformConnection);
+        }
 
         //Start bus
         var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);

@@ -1,4 +1,5 @@
-﻿using DA.Core.Constants;
+﻿using System.Runtime.InteropServices;
+using DA.Core.Constants;
 using NServiceBus;
 
 namespace DA.Billing;
@@ -19,12 +20,16 @@ internal static class Program
         var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
         transport.UseConventionalRoutingTopology();
         transport.ConnectionString(ConnectionString.RabbitMQConnectionString);
-
-        //Configure monitoring system
-        var json = await File.ReadAllTextAsync("ServicePulseConfig.json");
-        var servicePlatformConnection = ServicePlatformConnectionConfiguration.Parse(json);
-        endpointConfiguration.ConnectToServicePlatform(servicePlatformConnection);
-
+        
+        //In OSX we don't have ServiceControl
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            //Configure monitoring system
+            var json = await File.ReadAllTextAsync("ServicePulseConfig.json");
+            var servicePlatformConnection = ServicePlatformConnectionConfiguration.Parse(json);
+            endpointConfiguration.ConnectToServicePlatform(servicePlatformConnection);
+        }
+        
         //Start bus
         var endpointInstance = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 

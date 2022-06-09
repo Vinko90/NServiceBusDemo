@@ -6,11 +6,11 @@ using NServiceBus.Logging;
 
 namespace DA.Sales;
 
-internal class BuyersRemorsePolicy : 
-    Saga<BuyersRemorseState>,
+class BuyersRemorsePolicy : 
+    Saga<BuyersRemorsePolicy.BuyersRemorseState>,
     IAmStartedByMessages<PlaceOrder>,
     IHandleMessages<CancelOrder>,
-    IHandleTimeouts<BuyersRemorseIsOver>
+    IHandleTimeouts<BuyersRemorsePolicy.BuyersRemorseIsOver>
 {
     static ILog log = LogManager.GetLogger<BuyersRemorsePolicy>();
 
@@ -54,10 +54,20 @@ internal class BuyersRemorsePolicy :
 
         return Task.CompletedTask;
     }
-}
-
-//Message DTO needed to handle buyers remorse timeout.
-//Used only here internally on the saga.
-internal class BuyersRemorseIsOver
-{
+    
+    /// <summary>
+    /// Saga Data -> Keep internal
+    /// </summary>
+    internal class BuyersRemorseState : ContainSagaData
+    {
+        public string OrderId { get; set; }
+    }
+    
+    /// <summary>
+    /// Message DTO needed to handle buyers remorse timeout.
+    /// Used only here internally on the saga.
+    /// </summary>
+    internal class BuyersRemorseIsOver
+    {
+    }
 }

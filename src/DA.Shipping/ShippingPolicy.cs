@@ -5,8 +5,8 @@ using NServiceBus.Logging;
 
 namespace DA.Shipping;
 
-public class ShippingPolicy : 
-    Saga<ShippingPolicyData>,
+class ShippingPolicy : 
+    Saga<ShippingPolicy.ShippingPolicyData>,
     IAmStartedByMessages<OrderPlaced>, // I can start the saga!
     IAmStartedByMessages<OrderBilled>  // I can start the saga too!
 {
@@ -40,5 +40,18 @@ public class ShippingPolicy :
             await context.SendLocal(new ShipOrder() { OrderId = Data.OrderId });
             MarkAsComplete();
         }
+    }
+    
+    
+    /// <summary>
+    /// Shipping Policy Data -> Keep Internal
+    /// </summary>
+    internal class ShippingPolicyData : ContainSagaData
+    {
+        public string OrderId { get; set; }
+
+        public bool IsOrderPlaced { get; set; }
+
+        public bool IsOrderBilled { get; set; }
     }
 }
